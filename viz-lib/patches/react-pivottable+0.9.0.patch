@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-pivottable/Utilities.js b/node_modules/react-pivottable/Utilities.js
+index 92172e0..7e52aaf 100644
+--- a/node_modules/react-pivottable/Utilities.js
++++ b/node_modules/react-pivottable/Utilities.js
+@@ -46,7 +46,7 @@ var numberFormat = function numberFormat(opts_in) {
+   var defaults = {
+     digitsAfterDecimal: 2,
+     scaler: 1,
+-    thousandsSep: ',',
++    thousandsSep: ' ',
+     decimalSep: '.',
+     prefix: '',
+     suffix: ''
