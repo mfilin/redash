@@ -7,38 +7,13 @@ services:
     depends_on:
       - postgres
       - redis
+    extra_hosts:
+      host.docker.internal: host-gateway
     ports:
       - "${REDASH_PORT:-5001}:5000"
       - "5678:5678"
     environment:
       PYTHONUNBUFFERED: 0
-
-  # scheduler:
-  #   <<: *redash-service
-  #   command: scheduler
-  #   environment:
-  #     QUEUES: "celery"
-  #     WORKERS_COUNT: 1
-  # scheduled_worker:
-  #   <<: *redash-service
-  #   command: worker
-  #   environment:
-  #     QUEUES: "scheduled_queries,schemas"
-  #     WORKERS_COUNT: 1
-  # adhoc_worker:
-  #   <<: *redash-service
-  #   command: worker
-  #   environment:
-  #     QUEUES: "queries"
-  #     WORKERS_COUNT: 2
-  # worker:
-  #   <<: *redash-service
-  #   command: worker
-  #   environment:
-  #     QUEUES: "periodic email default"
-  #     WORKERS_COUNT: 1
-
-
   scheduler:
     extends:
       file: compose.base.yaml
@@ -61,7 +36,6 @@ services:
       - server
     environment:
       PYTHONUNBUFFERED: 0
-
   redis:
     image: redis:7-alpine
     restart: unless-stopped
@@ -73,8 +47,6 @@ services:
     # improvement on my personal machine). We should consider moving this into a dedicated Docker Compose configuration for
     # tests.
     command: postgres -c fsync=off -c full_page_writes=off -c synchronous_commit=OFF
-    volumes:
-      - /opt/redash/postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust

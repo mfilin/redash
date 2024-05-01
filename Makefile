@@ -5,11 +5,11 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_PROFILES=local
 
 compose_build: .env
-	docker compose build
+	docker compose -f ./compose.yaml build
 
 up:
-	docker compose up -d redis postgres
-	docker compose exec -u postgres postgres psql postgres --csv \
+	docker compose -f ./compose.yaml up -d redis postgres scheduler worker
+	docker compose -f ./compose.yaml exec -u postgres postgres psql postgres --csv \
 		-1tqc "SELECT table_name FROM information_schema.tables WHERE table_name = 'organizations'" 2> /dev/null \
 		| grep -q "organizations" || make create_database
 	docker compose up -d --build
@@ -22,7 +22,7 @@ test_db:
 	docker compose exec postgres sh -c 'psql -U postgres -c "drop database if exists tests;" && psql -U postgres -c "create database tests;"'
 
 create_db: .env
-	docker compose run server create_db
+	docker compose -f ./compose.yaml run server create_db
 
 create_database: create_db
 

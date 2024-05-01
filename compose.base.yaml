@@ -20,5 +20,7 @@ services:
       REDASH_COOKIE_SECRET: ${REDASH_COOKIE_SECRET}
       REDASH_SECRET_KEY: ${REDASH_SECRET_KEY}
       REDASH_PRODUCTION: ${REDASH_PRODUCTION:-true}
+    extra_hosts:
+      host.docker.internal: host-gateway
     env_file:
       - .env
